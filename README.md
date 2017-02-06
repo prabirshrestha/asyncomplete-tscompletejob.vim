@@ -8,14 +8,13 @@ via [tscompletejob](https://github.com/runoshun/tscompletejob). Internally tscom
 
 ```vim
 Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'runoshun/tscompletejob'
 if !has('nvim')
-    Plug 'runoshun/tscompletejob'
     Plug 'prabirshrestha/asyncomplete-tscompletejob.vim'
 endif
 ```
 
-Vim8 with timers and lambda required since tscompletejob depends on it.
-Neovim not supported since it depends on vim8 job apis and lambda which is not available yet in neovim.
+Neovim not supported yet since asyncomplete-tscompletejob depends on `lambda` which is not available yet in Neovim even though tscompletejob works on Vim8+ and Neovim.
 
 #### Registration
 
