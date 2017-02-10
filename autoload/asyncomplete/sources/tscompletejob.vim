@@ -1,3 +1,6 @@
+let s:request_id = 0
+let s:requests = {}
+
 function! asyncomplete#sources#tscompletejob#completor(opt, ctx) abort
     let l:col = a:ctx['col']
     let l:typed = a:ctx['typed']
@@ -8,17 +11,25 @@ function! asyncomplete#sources#tscompletejob#completor(opt, ctx) abort
         return
     endif
 
-    call tscompletejob#complete_with_handler(0, '', {success, response->s:on_complete(success, response, a:opt, a:ctx)})
+    let s:request_id = s:request_id + 1
+    let s:requests[s:request_id] = { "opt": a:opt, "ctx": a:ctx }
+    call tscompletejob#complete_with_handler(0, '', {
+                \ "callback" : function('s:on_complete'),
+                \ "request_id" : s:request_id,
+                \ })
 endfunction
 
-function! s:on_complete(success, response, opt, ctx) abort
-    if !a:success
+function! s:on_complete(request_id, success, response) abort
+    if !a:success || !has_key(s:requests, a:request_id)
         return
     endif
 
-    let l:col = a:ctx['col']
-    let l:kw = matchstr(a:ctx['typed'], '\w\+$')
+    let ctx = s:requests[a:request_id].ctx
+    let opt = s:requests[a:request_id].opt
+
+    let l:col = ctx['col']
+    let l:kw = matchstr(ctx['typed'], '\w\+$')
     let l:kwlen = len(l:kw)
 
-    call asyncomplete#complete(a:opt['name'], a:ctx, l:col - l:kwlen, a:response)
+    call asyncomplete#complete(opt['name'], ctx, l:col - l:kwlen, a:response)
 endfunction
