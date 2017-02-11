@@ -24,12 +24,10 @@ function! s:on_complete(request_id, success, response) abort
         return
     endif
 
-    let ctx = s:requests[a:request_id].ctx
-    let opt = s:requests[a:request_id].opt
+    let l:ctx = s:requests[a:request_id].ctx
+    let l:opt = s:requests[a:request_id].opt
+    unlet s:requests[a:request_id]
 
-    let l:col = ctx['col']
-    let l:kw = matchstr(ctx['typed'], '\w\+$')
-    let l:kwlen = len(l:kw)
-
-    call asyncomplete#complete(opt['name'], ctx, l:col - l:kwlen, a:response)
+    let l:start_col = tscompletejob#complete_with_handler(1, l:ctx['typed'], 0)
+    call asyncomplete#complete(l:opt['name'], l:ctx, l:start_col, a:response)
 endfunction
