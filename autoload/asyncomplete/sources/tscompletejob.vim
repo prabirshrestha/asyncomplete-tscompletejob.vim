@@ -5,6 +5,12 @@ let s:status_loading = 1
 let s:status_loaded = 2
 let s:status = s:status_unknown
 
+function! asyncomplete#sources#tscompletejob#get_source_options(opts)
+    return extend(extend({}, a:opts), {
+            \ 'refresh_pattern': '\(\k\+$\|\.$\)',
+            \ })
+endfunction
+
 function! asyncomplete#sources#tscompletejob#completor(opt, ctx) abort
     if s:status == s:status_loading
         return
@@ -16,9 +22,6 @@ function! asyncomplete#sources#tscompletejob#completor(opt, ctx) abort
 
     let l:kw = matchstr(l:typed, '\v\S+$')
     let l:kwlen = len(l:kw)
-    if l:kwlen < 1
-        return
-    endif
 
     if s:status == s:status_unknown
         let s:status = s:status_loading

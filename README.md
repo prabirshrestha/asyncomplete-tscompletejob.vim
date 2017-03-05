@@ -19,11 +19,11 @@ Plug 'prabirshrestha/asyncomplete-tscompletejob.vim'
 #### Registration
 
 ```vim
-call asyncomplete#register_source({
+call asyncomplete#register_source(asyncomplete#sources#tscompletejob#get_source_options({
     \ 'name': 'tscompletejob',
     \ 'whitelist': ['typescript'],
     \ 'completor': function('asyncomplete#sources#tscompletejob#completor'),
-    \ })
+    \ }))
 ```
 
 ### Credits
