@@ -21,7 +21,7 @@ Plug 'prabirshrestha/asyncomplete-tscompletejob.vim'
 ```vim
 call asyncomplete#register_source(asyncomplete#sources#tscompletejob#get_source_options({
     \ 'name': 'tscompletejob',
-    \ 'whitelist': ['typescript'],
+    \ 'allowlist': ['typescript'],
     \ 'completor': function('asyncomplete#sources#tscompletejob#completor'),
     \ }))
 ```
